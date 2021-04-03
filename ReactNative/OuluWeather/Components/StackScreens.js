@@ -22,8 +22,8 @@ const HomeStackScreen = () => {
     <HomeStack.Navigator
     screenOptions={screenOptions}
     >
-      <HomeStack.Screen name="Home" component={HomeScreen} 
-        options={{ title: 'Sää nyt'}}/>
+      <HomeStack.Screen name="Home" component={HomeScreen}
+        options={{ title: 'Sää nyt'}} />
     </HomeStack.Navigator>
   )
 }
