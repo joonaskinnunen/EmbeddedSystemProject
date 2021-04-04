@@ -22,7 +22,7 @@ const TabNavigation = () => {
             setData(response.data)
         })
         .catch(error => {
-          console.log('Error: ' + error.response.data.message)
+          console.log('Error: ' + error.message)
         })
     }
     React.useEffect(() => {
