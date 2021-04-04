@@ -4,6 +4,7 @@ import serial
 import datetime
 import re
 import numpy as np
+import warnings
 
 from pymongo import MongoClient
 # pprint library is used to make the output look more pretty
@@ -26,7 +27,7 @@ ser = serial.Serial(
 )
 
 # Initialize data array. Six columns, one for each sensor. 60 rows for each second of a minute
-data = np.zeros((60,6))
+data = np.zeros((30,6))
 
 # A flag variable for distance sensor
 movement = None
@@ -34,7 +35,7 @@ movement = None
 # Infinite loop to pick up and handle data from serial. Inside the loop is another loop that collects 60 samples, one each second
 while 1:
     k = 0
-    while k < 60:
+    while k < 30:
 
         x=ser.readline().decode()
         p = '[-?\d]+[.,\d]+|[\d]*[.][\d]+|[\d]+'
@@ -56,16 +57,21 @@ while 1:
                     data[k,i] = 0
                     movement = False
             i += 1
-        avgs = np.mean(data, axis=0)
-        if k == 1 and avgs[0] == 0:
-            k = 0 
+        avgs = np.mean(data[k,:], axis=0)
+        if np.sum(avgs, axis=0) == 0 or np.sum(avgs, axis=0)  == 11:
+            continue
         else:
             k += 1
-        time.sleep(1)
+        time.sleep(2)
+    # Replace zeros with NaN
     data[data == 0] = np.nan
-    avgs = np.nanmean(data, axis=0)
+    # Get average values without NaN values. Ignore warnings of calculating empty slices.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        avgs = np.nanmean(data, axis=0)
+    # Get sum values without NaN
     sums = np.nansum(data, axis=0)
     result = db.data.insert_one({'time': datetime.datetime.now(), 'temperature': avgs[5], 'humidity': avgs[0], 'lightness': avgs[2], 'pollution': avgs[4], 'activity': sums[3]})
     print(x)
     print(result)
-
+    print(data)
