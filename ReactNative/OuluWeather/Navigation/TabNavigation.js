@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
-import {HomeStackScreen, TemperatureStackScreen, MoistureStackScreen, LightnessStackScreen} from '../Components/StackScreens'
+import {HomeStackScreen, TemperatureStackScreen, MoistureStackScreen, LightnessStackScreen, ActivityStackScreen} from '../Components/StackScreens'
 import AppContext from '../Components/AppContext'
 import axios from 'axios'
 
@@ -57,6 +57,9 @@ const TabNavigation = () => {
                             else if (route.name === 'Lightness') {
                                 iconName = 'sunny'
                             }
+                            else if (route.name === 'Activity') {
+                                iconName = 'walk-outline'
+                            }
                             return iconName == 'temperature-high' ? <FontAwesome5 name={iconName} size={size} color={color} /> : <Ionicons name={iconName} size={size} color={color} />;
                         },
                     })}
@@ -73,6 +76,8 @@ const TabNavigation = () => {
                         options={{ title: 'Ilman kosteus' }} />
                     <Tab.Screen name="Lightness" component={LightnessStackScreen}
                         options={{ title: 'Valon määrä' }} />
+                    <Tab.Screen name="Activity" component={ActivityStackScreen}
+                        options={{ title: 'Ulkonaliikkumisaktiivisuus' }} />
                 </Tab.Navigator>
             </NavigationContainer>
         </AppContext.Provider>
