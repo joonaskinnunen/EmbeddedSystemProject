@@ -35,14 +35,14 @@ const LightnessScreen = () => {
   lightnesses = lightnesses.filter(x => x[1] < 1500)
 
   for (let i = 0; i < lightnesses.length; i++) {
-    labels.push(lightnesses[i][0])
-    datasets[0].data.push(lightnesses[i][1])
-    datasets[1].data.push(lightnesses[i][2])
+    labels.unshift(lightnesses[i][0])
+    datasets[0].data.unshift(lightnesses[i][1])
+    datasets[1].data.unshift(lightnesses[i][2])
   }
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>10 päivän ylin ja alin ilmankosteus valon määrä</Text>
+      <Text>10 päivän ylin ja alin valon määrä (luxia)</Text>
       <LineChart
         data={{
           labels,
@@ -57,7 +57,7 @@ const LightnessScreen = () => {
           backgroundColor: "#e9f5f3",
           backgroundGradientFrom: "#e9f5f3",
           backgroundGradientTo: "#bcf7f4",
-          decimalPlaces: 2,
+          decimalPlaces: 0,
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: {

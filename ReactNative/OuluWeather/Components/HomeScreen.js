@@ -12,9 +12,9 @@ const HomeScreen = ({navigation}) => {
         <Text>Tervetuloa!</Text>
         <Text>Tämä sovellus näyttää Oulun keskustan lämpötilan, ilmankosteuden ja valon määrän.{"\n"}
         Voit katsoa tietoja reaaliajassa tai tarkastella historiallista dataa..</Text>
-        <Text>Lämpötila: {data.length > 0 ? data[data.length - 1].temperature : 'Loading...'}°C</Text>
-        <Text>Ilmankosteus: {data.length > 0 ? data[data.length - 1].humidity : 'Loading...'}%</Text>
-        <Text>Valon määrä: {data.length > 0 ? data[data.length - 1].lightness : 'Loading...'}lux</Text>
+        <Text>Lämpötila: {data.length > 0 ? parseFloat(data[data.length - 1].temperature).toFixed(2) : 'Loading...'}°C</Text>
+        <Text>Ilmankosteus: {data.length > 0 ? parseInt(data[data.length - 1].humidity) : 'Loading...'}%</Text>
+        <Text>Valon määrä: {data.length > 0 ? parseInt(data[data.length - 1].lightness) : 'Loading...'}lux</Text>
       </View>
     )
   }

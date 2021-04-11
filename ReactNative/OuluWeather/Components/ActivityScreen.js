@@ -31,8 +31,8 @@ const ActivityScreen = () => {
   activitys = activitys.filter(x => x[1] > 0)
 
   for (let i = 0; i < activitys.length; i++) {
-    labels.push(activitys[i][0])
-    datasets[0].data.push(activitys[i][1])
+    labels.unshift(activitys[i][0])
+    datasets[0].data.unshift(activitys[i][1])
   }
 
   return (
@@ -51,7 +51,7 @@ const ActivityScreen = () => {
           backgroundColor: "#e9f5f3",
           backgroundGradientFrom: "#e9f5f3",
           backgroundGradientTo: "#bcf7f4",
-          decimalPlaces: 2,
+          decimalPlaces: 0,
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: {

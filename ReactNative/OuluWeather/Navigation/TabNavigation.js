@@ -15,7 +15,7 @@ const TabNavigation = () => {
     const getData = () => {
         const config = {
             method: 'get',
-            url: 'http://localhost:3001/api/data',
+            url: 'http://ouluweather.herokuapp.com/api/data',
         }
         axios(config)
         .then(response => {

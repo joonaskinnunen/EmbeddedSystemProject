@@ -35,9 +35,9 @@ const TemperatureScreen = () => {
   temperatures = temperatures.filter(x => x[1] < 50)
 
   for (let i = 0; i < temperatures.length; i++) {
-    labels.push(temperatures[i][0])
-    datasets[0].data.push(temperatures[i][1])
-    datasets[1].data.push(temperatures[i][2])
+    labels.unshift(temperatures[i][0])
+    datasets[0].data.unshift(temperatures[i][1])
+    datasets[1].data.unshift(temperatures[i][2])
   }
 
   return (
@@ -57,7 +57,7 @@ const TemperatureScreen = () => {
           backgroundColor: "#e9f5f3",
           backgroundGradientFrom: "#e9f5f3",
           backgroundGradientTo: "#bcf7f4",
-          decimalPlaces: 2,
+          decimalPlaces: 0,
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: {

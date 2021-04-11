@@ -35,9 +35,9 @@ const MoistureScreen = () => {
   humiditys = humiditys.filter(x => x[1] < 101)
 
   for (let i = 0; i < humiditys.length; i++) {
-    labels.push(humiditys[i][0])
-    datasets[0].data.push(humiditys[i][1])
-    datasets[1].data.push(humiditys[i][2])
+    labels.unshift(humiditys[i][0])
+    datasets[0].data.unshift(humiditys[i][1])
+    datasets[1].data.unshift(humiditys[i][2])
   }
 
   return (
@@ -57,7 +57,7 @@ const MoistureScreen = () => {
           backgroundColor: "#e9f5f3",
           backgroundGradientFrom: "#e9f5f3",
           backgroundGradientTo: "#bcf7f4",
-          decimalPlaces: 2,
+          decimalPlaces: 0,
           color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
           style: {
