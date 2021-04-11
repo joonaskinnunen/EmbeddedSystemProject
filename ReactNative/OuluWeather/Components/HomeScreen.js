@@ -14,7 +14,7 @@ const HomeScreen = ({navigation}) => {
         Voit katsoa tietoja reaaliajassa tai tarkastella historiallista dataa..</Text>
         <Text>Lämpötila: {data.length > 0 ? data[data.length - 1].temperature : 'Loading...'}°C</Text>
         <Text>Ilmankosteus: {data.length > 0 ? data[data.length - 1].humidity : 'Loading...'}%</Text>
-        <Text>Valon määrä: 20%</Text>
+        <Text>Valon määrä: {data.length > 0 ? data[data.length - 1].lightness : 'Loading...'}lux</Text>
       </View>
     )
   }
