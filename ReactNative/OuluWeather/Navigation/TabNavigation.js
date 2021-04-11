@@ -26,7 +26,8 @@ const TabNavigation = () => {
         })
     }
     React.useEffect(() => {
-        const interval_id = setInterval(getData, 1000)
+        getData()
+        const interval_id = setInterval(getData, 1000000)
         return () => {
             clearInterval(interval_id)
         }
