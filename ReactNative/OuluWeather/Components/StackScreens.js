@@ -4,6 +4,7 @@ import HomeScreen from './HomeScreen'
 import TemperatureScreen from './TemperatureScreen'
 import MoistureScreen from './MoistureScreen'
 import LightnessScreen from './LightnessScreen'
+import ActivityScreen from './ActivityScreen'
 
 const screenOptions = {
     headerStyle: {
@@ -61,4 +62,14 @@ const LightnessStackScreen = () => {
   )
 }
 
-export {HomeStackScreen, TemperatureStackScreen, MoistureStackScreen, LightnessStackScreen}
+const ActivityStackScreen = () => {
+  return (
+    <HomeStack.Navigator
+    screenOptions={screenOptions}
+    >
+      <HomeStack.Screen name="Activity" component={ActivityScreen}
+        options={{ title: 'Ulkonaliikkumisaktiivisuus'}}/>
+    </HomeStack.Navigator>
+  )
+}
+export {HomeStackScreen, TemperatureStackScreen, MoistureStackScreen, LightnessStackScreen, ActivityStackScreen}
