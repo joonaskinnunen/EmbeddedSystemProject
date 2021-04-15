@@ -8,7 +8,7 @@ import ActivityScreen from './ActivityScreen'
 
 const screenOptions = {
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: '#4cdbc4',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

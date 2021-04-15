@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { View, Text, Button } from 'react-native'
+import { View, Text } from 'react-native'
+import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
@@ -36,7 +37,8 @@ const ActivityScreen = () => {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
+      <Title style={{marginBottom: 50}}>Ulkonaliikkumisaktiivisuus</Title>
       <Text>Ulkonaliikkumisaktiivisuus viimeisen 10 päivän ajalta</Text>
       <LineChart
         data={{

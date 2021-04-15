@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { View, Text, Button } from 'react-native'
+import { View, Text } from 'react-native'
+import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
@@ -41,7 +42,8 @@ const LightnessScreen = () => {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
+      <Title style={{marginBottom: 50}}>Valon määrä</Title>
       <Text>10 päivän ylin ja alin valon määrä (luxia)</Text>
       <LineChart
         data={{
