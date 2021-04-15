@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
@@ -49,19 +49,19 @@ const MoistureScreen = () => {
   // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
   const [hourlyHumidity, setHourlyHumidity] = React.useState([])
   const getHourlyHumidity = () => {
-    
+
     let count = 0
     let total = 0
     let hourlyHumidities = []
-    let previous = new Date(data[data.length -1].time)
+    let previous = new Date(data[data.length - 1].time)
 
-    for (let i = data.length -1; hourlyHumidities.length < 24; i-- ) {
+    for (let i = data.length - 1; hourlyHumidities.length < 24; i--) {
       const current = new Date(data[i].time)
 
       if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
         total += data[i].humidity
         count++
-        } else {
+      } else {
         const tmpArr = [previous, total / count]
         console.log("total: ", total, "count: ", count)
         hourlyHumidities.push(tmpArr)
@@ -72,16 +72,25 @@ const MoistureScreen = () => {
     }
     setHourlyHumidity(hourlyHumidities)
   }
-  React.useEffect(getHourlyHumidity,[data])
+  React.useEffect(getHourlyHumidity, [data])
 
   for (let i = 0; i < hourlyHumidity.length; i++) {
     i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyHumidity[i][0].getUTCDate() + "." + (hourlyHumidity[i][0].getMonth() + 1) + ". " + hourlyHumidity[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
     hourlyDatasets[0].data.unshift(hourlyHumidity[i][1])
   }
 
+  if (hourlyHumidity.length == 0) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator />
+      </View>
+
+    )
+  }
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
-      <Title style={{marginBottom: 50}}>Ilmankosteus %</Title>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50 }}>
+      <Title style={{ marginBottom: 50 }}>Ilmankosteus %</Title>
       <Text>Suhteellinen ilmankosteus. 10 päivän ylin ja alin ilmankosteus %</Text>
       <LineChart
         data={{
@@ -150,6 +159,6 @@ const MoistureScreen = () => {
       />
     </View>
   )
-  }
+}
 
-  export default MoistureScreen
+export default MoistureScreen

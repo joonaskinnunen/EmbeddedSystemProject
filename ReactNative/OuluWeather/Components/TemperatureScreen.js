@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
@@ -49,20 +49,20 @@ const TemperatureScreen = () => {
   // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
   const [hourlyTemperature, setHourlyTemperature] = React.useState([])
   const getHourlyTemperature = () => {
-    
+
     let count = 0
     let total = 0
     let hourlyTemperatures = []
-    let previous = new Date(data[data.length -1].time)
+    let previous = new Date(data[data.length - 1].time)
 
-    for (let i = data.length -1; hourlyTemperatures.length < 24; i-- ) {
+    for (let i = data.length - 1; hourlyTemperatures.length < 24; i--) {
       const current = new Date(data[i].time)
 
       if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-        if ( data[i].temperature > 100 ) {continue} else { total += data[i].temperature }
+        if (data[i].temperature > 100) { continue } else { total += data[i].temperature }
         // total += data[i].temperature
         count++
-        } else {
+      } else {
         const tmpArr = [previous, total / count]
         hourlyTemperatures.push(tmpArr)
         previous = current
@@ -72,16 +72,25 @@ const TemperatureScreen = () => {
     }
     setHourlyTemperature(hourlyTemperatures)
   }
-  React.useEffect(getHourlyTemperature,[data])
+  React.useEffect(getHourlyTemperature, [data])
 
   for (let i = 0; i < hourlyTemperature.length; i++) {
     i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyTemperature[i][0].getUTCDate() + "." + (hourlyTemperature[i][0].getMonth() + 1) + ". " + hourlyTemperature[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
     hourlyDatasets[0].data.unshift(hourlyTemperature[i][1])
   }
 
+  if (hourlyTemperature.length == 0) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator />
+      </View>
+
+    )
+  }
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
-      <Title style={{marginBottom: 50}}>Lämpötila °C</Title>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50 }}>
+      <Title style={{ marginBottom: 50 }}>Lämpötila °C</Title>
       <Text>10 päivän ylin ja alin lämpötila</Text>
       <LineChart
         data={{
@@ -115,8 +124,8 @@ const TemperatureScreen = () => {
           borderRadius: 16
         }}
       />
-        <Text>Keskimääräinen lämpötila tuntitasolla (viimeiset 24 mittaustuntia)</Text>
-        <LineChart
+      <Text>Keskimääräinen lämpötila tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+      <LineChart
         data={{
           labels: hourlyLabels,
           datasets: hourlyDatasets

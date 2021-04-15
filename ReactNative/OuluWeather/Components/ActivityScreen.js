@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
@@ -44,11 +44,11 @@ const ActivityScreen = () => {
   // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
   const [hourlyActivity, setHourlyActivity] = React.useState([])
   const getHourlyActivity = () => {
-    
-    let hourlyActivitys = []
-    let previous = new Date(data[data.length -1].time)
 
-    for (let i = data.length -1; hourlyActivitys.length < 24; i-- ) {
+    let hourlyActivitys = []
+    let previous = new Date(data[data.length - 1].time)
+
+    for (let i = data.length - 1; hourlyActivitys.length < 24; i--) {
       const current = new Date(data[i].time)
 
       if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
@@ -62,16 +62,25 @@ const ActivityScreen = () => {
     }
     setHourlyActivity(hourlyActivitys)
   }
-  React.useEffect(getHourlyActivity,[data])
+  React.useEffect(getHourlyActivity, [data])
 
   for (let i = 0; i < hourlyActivity.length; i++) {
     i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyActivity[i][0].getUTCDate() + "." + (hourlyActivity[i][0].getMonth() + 1) + ". " + hourlyActivity[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
     hourlyDatasets[0].data.unshift(hourlyActivity[i][1])
   }
 
+  if (hourlyActivity.length == 0) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator />
+      </View>
+
+    )
+  }
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
-      <Title style={{marginBottom: 50}}>Ulkonaliikkumisaktiivisuus</Title>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50 }}>
+      <Title style={{ marginBottom: 50 }}>Ulkonaliikkumisaktiivisuus</Title>
       <Text>Ulkonaliikkumisaktiivisuus viimeisen 10 päivän ajalta</Text>
       <LineChart
         data={{
@@ -104,8 +113,8 @@ const ActivityScreen = () => {
           borderRadius: 16
         }}
       />
-    <Text>Ulkonaliikkumisaktiivisuus tuntitasolla (viimeiset 24 mittaustuntia)</Text>
-    <LineChart
+      <Text>Ulkonaliikkumisaktiivisuus tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+      <LineChart
         data={{
           labels: hourlyLabels,
           datasets: hourlyDatasets
@@ -138,6 +147,6 @@ const ActivityScreen = () => {
       />
     </View>
   )
-  }
+}
 
-  export default ActivityScreen
+export default ActivityScreen

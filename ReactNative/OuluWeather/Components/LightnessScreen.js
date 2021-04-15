@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
@@ -46,42 +46,51 @@ const LightnessScreen = () => {
     datasets[1].data.unshift(lightnesses[i][2])
   }
 
-    // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
-    const [hourlyLightness, setHourlyLightness] = React.useState([])
-    const getHourlyLightness = () => {
-      
-      let count = 0
-      let total = 0
-      let hourlyLightnesses = []
-      let previous = new Date(data[data.length -1].time)
-  
-      for (let i = data.length -1; hourlyLightnesses.length < 24; i-- ) {
-        const current = new Date(data[i].time)
-  
-        if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-          total += data[i].lightness
-          count++
-          } else {
-          const tmpArr = [previous, total / count]
-          hourlyLightnesses.push(tmpArr)
-          previous = current
-          count = 0
-          total = 0
-        }
+  // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
+  const [hourlyLightness, setHourlyLightness] = React.useState([])
+  const getHourlyLightness = () => {
+
+    let count = 0
+    let total = 0
+    let hourlyLightnesses = []
+    let previous = new Date(data[data.length - 1].time)
+
+    for (let i = data.length - 1; hourlyLightnesses.length < 24; i--) {
+      const current = new Date(data[i].time)
+
+      if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+        total += data[i].lightness
+        count++
+      } else {
+        const tmpArr = [previous, total / count]
+        hourlyLightnesses.push(tmpArr)
+        previous = current
+        count = 0
+        total = 0
       }
-      setHourlyLightness(hourlyLightnesses)
     }
-    React.useEffect(getHourlyLightness,[data])
-  
-    for (let i = 0; i < hourlyLightness.length; i++) {
-      i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyLightness[i][0].getUTCDate() + "." + (hourlyLightness[i][0].getMonth() + 1) + ". " + hourlyLightness[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
-      hourlyDatasets[0].data.unshift(hourlyLightness[i][1])
-    }
+    setHourlyLightness(hourlyLightnesses)
+  }
+  React.useEffect(getHourlyLightness, [data])
+
+  for (let i = 0; i < hourlyLightness.length; i++) {
+    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyLightness[i][0].getUTCDate() + "." + (hourlyLightness[i][0].getMonth() + 1) + ". " + hourlyLightness[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+    hourlyDatasets[0].data.unshift(hourlyLightness[i][1])
+  }
+
+  if (hourlyLightness.length == 0) {
+    return (
+      <View style={{ flex: 1 }}>
+        <ActivityIndicator />
+      </View>
+
+    )
+  }
 
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
-      <Title style={{marginBottom: 50}}>Valon määrä</Title>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50 }}>
+      <Title style={{ marginBottom: 50 }}>Valon määrä</Title>
       <Text>10 päivän ylin ja alin valon määrä (luxia)</Text>
       <LineChart
         data={{
@@ -115,8 +124,8 @@ const LightnessScreen = () => {
           borderRadius: 16
         }}
       />
-    <Text>Keskimääräinen valon määrä tuntitasolla (viimeiset 24 mittaustuntia)</Text>
-    <LineChart
+      <Text>Keskimääräinen valon määrä tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+      <LineChart
         data={{
           labels: hourlyLabels,
           datasets: hourlyDatasets
@@ -150,6 +159,6 @@ const LightnessScreen = () => {
       />
     </View>
   )
-  }
+}
 
-  export default LightnessScreen
+export default LightnessScreen
