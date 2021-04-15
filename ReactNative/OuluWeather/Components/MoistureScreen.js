@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator, ScrollView, SafeAreaView } from 'react-native'
 import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
@@ -89,75 +89,79 @@ const MoistureScreen = () => {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50 }}>
-      <Title style={{ marginBottom: 50 }}>Ilmankosteus %</Title>
-      <Text>Suhteellinen ilmankosteus. 10 päivän ylin ja alin ilmankosteus %</Text>
-      <LineChart
-        data={{
-          labels,
-          datasets
-        }}
-        width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
-        height={220}
-        segments={5}
-        yAxisSuffix="%"
-        yAxisInterval={1}
-        chartConfig={{
-          backgroundColor: "#e9f5f3",
-          backgroundGradientFrom: "#e9f5f3",
-          backgroundGradientTo: "#bcf7f4",
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726"
-          }
-        }}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16
-        }}
-      />
-      <Text>Keskimääräinen ilmankosteus tuntitasolla (viimeiset 24 mittaustuntia)</Text>
-      <LineChart
-        data={{
-          labels: hourlyLabels,
-          datasets: hourlyDatasets
-        }}
-        width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
-        height={220}
-        segments={5}
-        yAxisSuffix="%"
-        yAxisInterval={1}
-        chartConfig={{
-          backgroundColor: "#e9f5f3",
-          backgroundGradientFrom: "#e9f5f3",
-          backgroundGradientTo: "#bcf7f4",
-          decimalPlaces: 0,
-          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          style: {
-            borderRadius: 16
-          },
-          propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726"
-          },
-        }}
-        bezier
-        style={{
-          marginVertical: 8,
-          borderRadius: 16,
-        }}
-      />
-    </View>
+    <SafeAreaView>
+      <ScrollView>
+        <View style={{ flex: 1, alignItems: 'center', marginVertical: 20 }}>
+          <Title style={{ marginBottom: 30 }}>Ilmankosteus %</Title>
+          <Text>Suhteellinen ilmankosteus. 10 päivän ylin ja alin ilmankosteus %</Text>
+          <LineChart
+            data={{
+              labels,
+              datasets
+            }}
+            width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
+            height={220}
+            segments={5}
+            yAxisSuffix="%"
+            yAxisInterval={1}
+            chartConfig={{
+              backgroundColor: "#e9f5f3",
+              backgroundGradientFrom: "#e9f5f3",
+              backgroundGradientTo: "#bcf7f4",
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: {
+                borderRadius: 16
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726"
+              }
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />
+          <Text style={{marginTop: 30, textAlign: 'center'}}>Keskimääräinen ilmankosteus tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+          <LineChart
+            data={{
+              labels: hourlyLabels,
+              datasets: hourlyDatasets
+            }}
+            width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
+            height={220}
+            segments={5}
+            yAxisSuffix="%"
+            yAxisInterval={1}
+            chartConfig={{
+              backgroundColor: "#e9f5f3",
+              backgroundGradientFrom: "#e9f5f3",
+              backgroundGradientTo: "#bcf7f4",
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: {
+                borderRadius: 16
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726"
+              },
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16,
+            }}
+          />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 

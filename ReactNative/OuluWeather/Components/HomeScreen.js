@@ -18,6 +18,11 @@ const HomeScreen = ({ navigation }) => {
       width: 175,
       height: 150,
       borderWidth: 1,
+      borderRadius: 20,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,
       borderColor: "#4cdbc4",
       margin: 0
     }
