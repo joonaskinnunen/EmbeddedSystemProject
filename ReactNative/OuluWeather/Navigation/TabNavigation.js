@@ -38,9 +38,9 @@ const TabNavigation = () => {
                 <Tab.Navigator initialRouteName="Home"
                     screenOptions={({ route }) => ({
                         headerStyle: {
-                            backgroundColor: '#f4511e',
+                            backgroundColor: 'blue',
                         },
-                        headerTintColor: '#fff',
+                        headerTintColor: '#4cdbc4',
                         headerTitleStyle: {
                             fontWeight: 'bold',
                         },
@@ -65,7 +65,7 @@ const TabNavigation = () => {
                         },
                     })}
                     tabBarOptions={{
-                        activeTintColor: 'tomato',
+                        activeTintColor: '#4cdbc4',
                         inactiveTintColor: 'gray',
                     }}
                 >
@@ -78,7 +78,7 @@ const TabNavigation = () => {
                     <Tab.Screen name="Lightness" component={LightnessStackScreen}
                         options={{ title: 'Valon määrä' }} />
                     <Tab.Screen name="Activity" component={ActivityStackScreen}
-                        options={{ title: 'Ulkonaliikkumisaktiivisuus' }} />
+                        options={{ title: 'Aktiivisuus' }} />
                 </Tab.Navigator>
             </NavigationContainer>
         </AppContext.Provider>

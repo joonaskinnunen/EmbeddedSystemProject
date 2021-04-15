@@ -3,6 +3,7 @@ import { View, Text } from 'react-native'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
+import { Title } from 'react-native-paper'
 
 const TemperatureScreen = () => {
   const data = React.useContext(AppContext)
@@ -79,7 +80,8 @@ const TemperatureScreen = () => {
   }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center', marginVertical: 50}}>
+      <Title style={{marginBottom: 50}}>Lämpötila °C</Title>
       <Text>10 päivän ylin ja alin lämpötila</Text>
       <LineChart
         data={{
