@@ -15,6 +15,11 @@ const LightnessScreen = () => {
   },
   { data: [] }]
 
+  const hourlyLabels = []
+  const hourlyDatasets = [{
+    data: []
+  }]
+
   let min = 1500
   let max = 0
   for (let j = 0; j < 10; j++) {
@@ -31,7 +36,7 @@ const LightnessScreen = () => {
     max = 0
     dateNow.setDate(dateNow.getDate() - 1)
   }
-  console.log(lightnesses)
+  // console.log(lightnesses)
   lightnesses = lightnesses.filter(x => x[1] < 1500)
 
   for (let i = 0; i < lightnesses.length; i++) {
@@ -39,6 +44,39 @@ const LightnessScreen = () => {
     datasets[0].data.unshift(lightnesses[i][1])
     datasets[1].data.unshift(lightnesses[i][2])
   }
+
+    // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
+    const [hourlyLightness, setHourlyLightness] = React.useState([])
+    const getHourlyLightness = () => {
+      
+      let count = 0
+      let total = 0
+      let hourlyLightnesses = []
+      let previous = new Date(data[data.length -1].time)
+  
+      for (let i = data.length -1; hourlyLightnesses.length < 24; i-- ) {
+        const current = new Date(data[i].time)
+  
+        if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+          total += data[i].lightness
+          count++
+          } else {
+          const tmpArr = [previous, total / count]
+          hourlyLightnesses.push(tmpArr)
+          previous = current
+          count = 0
+          total = 0
+        }
+      }
+      setHourlyLightness(hourlyLightnesses)
+    }
+    React.useEffect(getHourlyLightness,[data])
+  
+    for (let i = 0; i < hourlyLightness.length; i++) {
+      i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyLightness[i][0].getUTCDate() + "." + (hourlyLightness[i][0].getMonth() + 1) + ". " + hourlyLightness[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+      hourlyDatasets[0].data.unshift(hourlyLightness[i][1])
+    }
+
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -73,6 +111,39 @@ const LightnessScreen = () => {
         style={{
           marginVertical: 8,
           borderRadius: 16
+        }}
+      />
+    <Text>Keskimääräinen valon määrä tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+    <LineChart
+        data={{
+          labels: hourlyLabels,
+          datasets: hourlyDatasets
+        }}
+        width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
+        height={220}
+        segments={5}
+        yAxisSuffix="lx"
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e9f5f3",
+          backgroundGradientFrom: "#e9f5f3",
+          backgroundGradientTo: "#bcf7f4",
+          decimalPlaces: 0,
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          style: {
+            borderRadius: 16
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          },
+        }}
+        bezier
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
         }}
       />
     </View>

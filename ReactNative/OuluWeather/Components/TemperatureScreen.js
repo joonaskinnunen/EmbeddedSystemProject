@@ -15,6 +15,11 @@ const TemperatureScreen = () => {
   },
   { data: [] }]
 
+  const hourlyLabels = []
+  const hourlyDatasets = [{
+    data: []
+  }]
+
   let min = 99
   let max = -50
   for (let j = 0; j < 10; j++) {
@@ -38,6 +43,39 @@ const TemperatureScreen = () => {
     labels.unshift(temperatures[i][0])
     datasets[0].data.unshift(temperatures[i][1])
     datasets[1].data.unshift(temperatures[i][2])
+  }
+
+  // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
+  const [hourlyTemperature, setHourlyTemperature] = React.useState([])
+  const getHourlyTemperature = () => {
+    
+    let count = 0
+    let total = 0
+    let hourlyTemperatures = []
+    let previous = new Date(data[data.length -1].time)
+
+    for (let i = data.length -1; hourlyTemperatures.length < 24; i-- ) {
+      const current = new Date(data[i].time)
+
+      if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+        if ( data[i].temperature > 100 ) {continue} else { total += data[i].temperature }
+        // total += data[i].temperature
+        count++
+        } else {
+        const tmpArr = [previous, total / count]
+        hourlyTemperatures.push(tmpArr)
+        previous = current
+        count = 0
+        total = 0
+      }
+    }
+    setHourlyTemperature(hourlyTemperatures)
+  }
+  React.useEffect(getHourlyTemperature,[data])
+
+  for (let i = 0; i < hourlyTemperature.length; i++) {
+    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyTemperature[i][0].getUTCDate() + "." + (hourlyTemperature[i][0].getMonth() + 1) + ". " + hourlyTemperature[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+    hourlyDatasets[0].data.unshift(hourlyTemperature[i][1])
   }
 
   return (
@@ -73,6 +111,39 @@ const TemperatureScreen = () => {
         style={{
           marginVertical: 8,
           borderRadius: 16
+        }}
+      />
+        <Text>Keskimääräinen lämpötila tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+        <LineChart
+        data={{
+          labels: hourlyLabels,
+          datasets: hourlyDatasets
+        }}
+        width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
+        height={220}
+        segments={5}
+        yAxisSuffix="°C"
+        yAxisInterval={1}
+        chartConfig={{
+          backgroundColor: "#e9f5f3",
+          backgroundGradientFrom: "#e9f5f3",
+          backgroundGradientTo: "#bcf7f4",
+          decimalPlaces: 0,
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          style: {
+            borderRadius: 16
+          },
+          propsForDots: {
+            r: "6",
+            strokeWidth: "2",
+            stroke: "#ffa726"
+          },
+        }}
+        bezier
+        style={{
+          marginVertical: 8,
+          borderRadius: 16,
         }}
       />
     </View>
