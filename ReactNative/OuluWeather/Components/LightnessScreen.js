@@ -74,7 +74,7 @@ const LightnessScreen = () => {
   React.useEffect(getHourlyLightness, [data])
 
   for (let i = 0; i < hourlyLightness.length; i++) {
-    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyLightness[i][0].getUTCDate() + "." + (hourlyLightness[i][0].getMonth() + 1) + ". " + hourlyLightness[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyLightness[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
     hourlyDatasets[0].data.unshift(hourlyLightness[i][1])
   }
 
@@ -101,13 +101,14 @@ const LightnessScreen = () => {
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
             height={220}
-            segments={5}
+            segments={10}
             yAxisSuffix="lx"
             yAxisInterval={1}
+            fromZero={true}
             chartConfig={{
               backgroundColor: "#e9f5f3",
-              backgroundGradientFrom: "#e9f5f3",
-              backgroundGradientTo: "#bcf7f4",
+              backgroundGradientFrom: "#ffff",
+              backgroundGradientTo: "#c0f2ea",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -134,13 +135,14 @@ const LightnessScreen = () => {
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
             height={220}
-            segments={5}
+            segments={10}
             yAxisSuffix="lx"
             yAxisInterval={1}
+            fromZero={true}
             chartConfig={{
               backgroundColor: "#e9f5f3",
-              backgroundGradientFrom: "#e9f5f3",
-              backgroundGradientTo: "#bcf7f4",
+              backgroundGradientFrom: "#ffff",
+              backgroundGradientTo: "#c0f2ea",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

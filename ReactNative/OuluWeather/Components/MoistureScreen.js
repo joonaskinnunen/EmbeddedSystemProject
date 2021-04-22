@@ -75,7 +75,7 @@ const MoistureScreen = () => {
   React.useEffect(getHourlyHumidity, [data])
 
   for (let i = 0; i < hourlyHumidity.length; i++) {
-    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyHumidity[i][0].getUTCDate() + "." + (hourlyHumidity[i][0].getMonth() + 1) + ". " + hourlyHumidity[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyHumidity[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
     hourlyDatasets[0].data.unshift(hourlyHumidity[i][1])
   }
 
@@ -101,13 +101,14 @@ const MoistureScreen = () => {
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
             height={220}
-            segments={5}
+            segments={10}
             yAxisSuffix="%"
             yAxisInterval={1}
+            fromZero={true}
             chartConfig={{
               backgroundColor: "#e9f5f3",
-              backgroundGradientFrom: "#e9f5f3",
-              backgroundGradientTo: "#bcf7f4",
+              backgroundGradientFrom: "#ffff",
+              backgroundGradientTo: "#c0f2ea",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -134,13 +135,14 @@ const MoistureScreen = () => {
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
             height={220}
-            segments={5}
+            segments={10}
             yAxisSuffix="%"
             yAxisInterval={1}
+            fromZero={true}
             chartConfig={{
               backgroundColor: "#e9f5f3",
-              backgroundGradientFrom: "#e9f5f3",
-              backgroundGradientTo: "#bcf7f4",
+              backgroundGradientFrom: "#ffff",
+              backgroundGradientTo: "#c0f2ea",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

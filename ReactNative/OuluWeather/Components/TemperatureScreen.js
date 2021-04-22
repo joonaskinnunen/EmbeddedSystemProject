@@ -75,7 +75,7 @@ const TemperatureScreen = () => {
   React.useEffect(getHourlyTemperature, [data])
 
   for (let i = 0; i < hourlyTemperature.length; i++) {
-    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyTemperature[i][0].getUTCDate() + "." + (hourlyTemperature[i][0].getMonth() + 1) + ". " + hourlyTemperature[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyTemperature[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
     hourlyDatasets[0].data.unshift(hourlyTemperature[i][1])
   }
 
@@ -101,13 +101,20 @@ const TemperatureScreen = () => {
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
             height={220}
-            segments={5}
+            segments={10}
             yAxisSuffix="°C"
             yAxisInterval={1}
+            fromZero={true}
+            onDataPointClick={({ value, getColor }) =>
+              showMessage({
+                message: `${value}`,
+                description: "You selected this value",
+                backgroundColor: getColor(0.9)
+              })
+            }
             chartConfig={{
-              backgroundColor: "#e9f5f3",
-              backgroundGradientFrom: "#e9f5f3",
-              backgroundGradientTo: "#bcf7f4",
+              backgroundGradientFrom: "#ffff",
+              backgroundGradientTo: "#c0f2ea",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
@@ -126,7 +133,7 @@ const TemperatureScreen = () => {
               borderRadius: 16
             }}
           />
-          <Text style={{marginTop: 30, textAlign: 'center'}}>Keskimääräinen lämpötila tuntitasolla (viimeiset 24 mittaustuntia)</Text>
+          <Text style={{ marginTop: 30, textAlign: 'center' }}>Keskimääräinen lämpötila tuntitasolla (viimeiset 24 mittaustuntia)</Text>
           <LineChart
             data={{
               labels: hourlyLabels,
@@ -134,13 +141,14 @@ const TemperatureScreen = () => {
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
             height={220}
-            segments={5}
+            segments={10}
             yAxisSuffix="°C"
             yAxisInterval={1}
+            fromZero={true}
             chartConfig={{
               backgroundColor: "#e9f5f3",
-              backgroundGradientFrom: "#e9f5f3",
-              backgroundGradientTo: "#bcf7f4",
+              backgroundGradientFrom: "#ffff",
+              backgroundGradientTo: "#c0f2ea",
               decimalPlaces: 0,
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,

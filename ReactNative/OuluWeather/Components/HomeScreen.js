@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, ActivityIndicator, Platform } from 'react-native'
 import AppContext from './AppContext'
 import { Title } from 'react-native-paper'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,6 +10,12 @@ const HomeScreen = ({ navigation }) => {
     container: {
       width: 350,
       height: 150,
+      margin: 2,
+      ...Platform.select({
+        ios: {
+          height: 154
+        }
+      })
     },
     tableCell: {
       justifyContent: "center",
@@ -19,12 +25,23 @@ const HomeScreen = ({ navigation }) => {
       height: 150,
       borderWidth: 1,
       borderRadius: 20,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 3 },
-      shadowOpacity: 0.8,
-      shadowRadius: 2,
       borderColor: "#4cdbc4",
-      margin: 0
+      margin: 2,
+      backgroundColor: '#f2f2f2',
+      shadowColor: '#000',
+      shadowRadius: 5,
+      shadowOffset: { width: 1, height: 3 },
+      shadowOpacity: 2,
+      ...Platform.select({
+        android: {
+          elevation: 10,
+        },
+        ios: {
+          margin: 3
+        },
+        default: {
+        }
+      })
     }
   })
 
@@ -42,13 +59,13 @@ const HomeScreen = ({ navigation }) => {
         flexDirection: "row",
       }]}>
         <View style={[styles.tableCell, {
-          borderBottomWidth: 0,
-          borderRightWidth: 0
+         // borderBottomWidth: 0,
+         // borderRightWidth: 0
         }]}>
           <Text style={{fontSize: 50, fontWeight: 'bold'}}><Ionicons name='thermometer-outline' color='red' size={40} />{data.length > 0 ? data[data.length - 1].temperature > 0 ? '+' + parseFloat(data[data.length - 1].temperature).toFixed(1).toString() :  '-' + parseFloat(data[data.length - 1].temperature).toFixed(1).toString() : <ActivityIndicator size="large" color="#00ff00" />}</Text>
         </View>
         <View style={[styles.tableCell, {
-          borderBottomWidth: 0,
+        //  borderBottomWidth: 0,
         }]}>
           <Text style={{fontSize: 35}}><Ionicons name='water' color='#29aae1' size={40} />{data.length > 0 ? parseInt(data[data.length - 1].humidity) + "%" : <ActivityIndicator size="large" color="#00ff00" />}</Text>
         </View>
@@ -57,7 +74,7 @@ const HomeScreen = ({ navigation }) => {
         flexDirection: "row"
       }]}>
         <View style={[styles.tableCell, {
-          borderRightWidth: 0
+        //  borderRightWidth: 0
         }]}>
           <Text style={{fontSize: 35}}><Ionicons name='sunny' color='yellow' size={40} />{data.length > 0 ? parseInt(data[data.length - 1].lightness) + "lx" : <ActivityIndicator size="large" color="#00ff00" />}</Text>
         </View>
