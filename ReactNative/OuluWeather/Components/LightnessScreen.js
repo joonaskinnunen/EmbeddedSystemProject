@@ -50,26 +50,29 @@ const LightnessScreen = () => {
   const [hourlyLightness, setHourlyLightness] = React.useState([])
   const getHourlyLightness = () => {
 
-    let count = 0
-    let total = 0
-    let hourlyLightnesses = []
-    let previous = new Date(data[data.length - 1].time)
-
-    for (let i = data.length - 1; hourlyLightnesses.length < 24; i--) {
-      const current = new Date(data[i].time)
-
-      if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-        total += data[i].lightness
-        count++
-      } else {
-        const tmpArr = [previous, total / count]
-        hourlyLightnesses.push(tmpArr)
-        previous = current
-        count = 0
-        total = 0
+    if (data.length > 0) {
+      let count = 0
+      let total = 0
+      let hourlyLightnesses = []
+      let previous = new Date(data[data.length - 1].time)
+  
+      for (let i = data.length - 1; hourlyLightnesses.length < 24; i--) {
+        const current = new Date(data[i].time)
+  
+        if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+          total += data[i].lightness
+          count++
+        } else {
+          const tmpArr = [previous, total / count]
+          hourlyLightnesses.push(tmpArr)
+          previous = current
+          count = 0
+          total = 0
+        }
       }
+      setHourlyLightness(hourlyLightnesses)
     }
-    setHourlyLightness(hourlyLightnesses)
+
   }
   React.useEffect(getHourlyLightness, [data])
 

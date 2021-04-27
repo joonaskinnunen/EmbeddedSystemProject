@@ -18,7 +18,6 @@ const HomeScreen = ({ navigation }) => {
       })
     },
     tableCell: {
-      cursor: 'pointer',
       justifyContent: "center",
       alignItems: "center",
       padding: 5,
@@ -41,6 +40,7 @@ const HomeScreen = ({ navigation }) => {
           margin: 3
         },
         default: {
+          cursor: 'pointer'
         }
       })
     }

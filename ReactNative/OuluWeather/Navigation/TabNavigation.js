@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -8,7 +9,9 @@ import AppContext from '../Components/AppContext'
 import axios from 'axios'
 
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialTopTabNavigator();
+// const Tab = createBottomTabNavigator();
+
 
 const TabNavigation = () => {
     const [data, setData] = React.useState([])
@@ -36,6 +39,7 @@ const TabNavigation = () => {
         <AppContext.Provider value={data}>
             <NavigationContainer>
                 <Tab.Navigator initialRouteName="Home"
+                    tabBarPosition= "bottom"
                     screenOptions={({ route }) => ({
                         headerStyle: {
                             backgroundColor: 'blue',
@@ -61,12 +65,19 @@ const TabNavigation = () => {
                             else if (route.name === 'Activity') {
                                 iconName = 'walk-outline'
                             }
-                            return iconName == 'temperature-high' ? <FontAwesome5 name={iconName} size={size} color={color} /> : <Ionicons name={iconName} size={size} color={color} />;
+                            return iconName == 'temperature-high' ? <FontAwesome5 name={iconName} size={23} color={color} /> : <Ionicons name={iconName} size={23} color={color} />;
                         },
                     })}
                     tabBarOptions={{
                         activeTintColor: '#4cdbc4',
                         inactiveTintColor: 'gray',
+                        showIcon: 'true',
+                        labelStyle: {
+                            textTransform: 'none'
+                        },
+                        tabStyle: {
+                            flexDirection: 'row'
+                        }
                     }}
                 >
                     <Tab.Screen name="Home" component={HomeStackScreen}

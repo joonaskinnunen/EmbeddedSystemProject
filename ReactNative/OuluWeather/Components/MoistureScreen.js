@@ -50,27 +50,30 @@ const MoistureScreen = () => {
   const [hourlyHumidity, setHourlyHumidity] = React.useState([])
   const getHourlyHumidity = () => {
 
-    let count = 0
-    let total = 0
-    let hourlyHumidities = []
-    let previous = new Date(data[data.length - 1].time)
-
-    for (let i = data.length - 1; hourlyHumidities.length < 24; i--) {
-      const current = new Date(data[i].time)
-
-      if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-        total += data[i].humidity
-        count++
-      } else {
-        const tmpArr = [previous, total / count]
-        console.log("total: ", total, "count: ", count)
-        hourlyHumidities.push(tmpArr)
-        previous = current
-        count = 0
-        total = 0
+    if (data.length > 0) {
+      let count = 0
+      let total = 0
+      let hourlyHumidities = []
+      let previous = new Date(data[data.length - 1].time)
+  
+      for (let i = data.length - 1; hourlyHumidities.length < 24; i--) {
+        const current = new Date(data[i].time)
+  
+        if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+          total += data[i].humidity
+          count++
+        } else {
+          const tmpArr = [previous, total / count]
+          console.log("total: ", total, "count: ", count)
+          hourlyHumidities.push(tmpArr)
+          previous = current
+          count = 0
+          total = 0
+        }
       }
+      setHourlyHumidity(hourlyHumidities)
     }
-    setHourlyHumidity(hourlyHumidities)
+
   }
   React.useEffect(getHourlyHumidity, [data])
 

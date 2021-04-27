@@ -45,22 +45,25 @@ const ActivityScreen = () => {
   const [hourlyActivity, setHourlyActivity] = React.useState([])
   const getHourlyActivity = () => {
 
-    let hourlyActivitys = []
-    let previous = new Date(data[data.length - 1].time)
+    if (data.length > 0) {
 
-    for (let i = data.length - 1; hourlyActivitys.length < 24; i--) {
-      const current = new Date(data[i].time)
+      let hourlyActivitys = []
+      let previous = new Date(data[data.length - 1].time)
 
-      if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-        countHourly += data[i].activity
-      } else {
-        const tmpArr = [previous, countHourly]
-        hourlyActivitys.push(tmpArr)
-        countHourly = data[i].activity
-        previous = current
+      for (let i = data.length - 1; hourlyActivitys.length < 24; i--) {
+        const current = new Date(data[i].time)
+
+        if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+          countHourly += data[i].activity
+        } else {
+          const tmpArr = [previous, countHourly]
+          hourlyActivitys.push(tmpArr)
+          countHourly = data[i].activity
+          previous = current
+        }
       }
+      setHourlyActivity(hourlyActivitys)
     }
-    setHourlyActivity(hourlyActivitys)
   }
   React.useEffect(getHourlyActivity, [data])
 

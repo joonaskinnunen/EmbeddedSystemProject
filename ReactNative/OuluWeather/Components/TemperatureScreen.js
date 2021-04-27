@@ -50,27 +50,30 @@ const TemperatureScreen = () => {
   const [hourlyTemperature, setHourlyTemperature] = React.useState([])
   const getHourlyTemperature = () => {
 
-    let count = 0
-    let total = 0
-    let hourlyTemperatures = []
-    let previous = new Date(data[data.length - 1].time)
-
-    for (let i = data.length - 1; hourlyTemperatures.length < 24; i--) {
-      const current = new Date(data[i].time)
-
-      if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-        if (data[i].temperature > 100) { continue } else { total += data[i].temperature }
-        // total += data[i].temperature
-        count++
-      } else {
-        const tmpArr = [previous, total / count]
-        hourlyTemperatures.push(tmpArr)
-        previous = current
-        count = 0
-        total = 0
+    if (data.length > 0) {
+      let count = 0
+      let total = 0
+      let hourlyTemperatures = []
+      let previous = new Date(data[data.length - 1].time)
+  
+      for (let i = data.length - 1; hourlyTemperatures.length < 24; i--) {
+        const current = new Date(data[i].time)
+  
+        if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
+          if (data[i].temperature > 100) { continue } else { total += data[i].temperature }
+          // total += data[i].temperature
+          count++
+        } else {
+          const tmpArr = [previous, total / count]
+          hourlyTemperatures.push(tmpArr)
+          previous = current
+          count = 0
+          total = 0
+        }
       }
+      setHourlyTemperature(hourlyTemperatures)
     }
-    setHourlyTemperature(hourlyTemperatures)
+
   }
   React.useEffect(getHourlyTemperature, [data])
 
