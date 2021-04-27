@@ -7,6 +7,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 import {HomeStackScreen, TemperatureStackScreen, MoistureStackScreen, LightnessStackScreen, ActivityStackScreen} from '../Components/StackScreens'
 import AppContext from '../Components/AppContext'
 import axios from 'axios'
+import {Platform} from 'react-native'
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -73,10 +74,30 @@ const TabNavigation = () => {
                         inactiveTintColor: 'gray',
                         showIcon: 'true',
                         labelStyle: {
+                            ...Platform.select({
+                                android: {
+                                    fontSize: 11
+                                },
+                                ios: {
+                                    fontSize: 11                                 
+                                },
+                                default: {
+                                }
+                            }),
                             textTransform: 'none'
                         },
                         tabStyle: {
-                            flexDirection: 'row'
+                            ...Platform.select({
+                                android: {
+                                    fontSize: 5
+                                },
+                                ios: {
+                                    fontSize: 5                                 
+                                },
+                                default: {
+                                  flexDirection: 'row'
+                                }
+                            })
                         }
                     }}
                 >

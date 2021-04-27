@@ -51,7 +51,6 @@ const HomeScreen = ({ navigation }) => {
   const dateNow = data.length > 0 ? new Date(data[data.length - 1].time) : new Date()
   dateNow.setHours(dateNow.getHours() - 3)
   return (
-    <SafeAreaView>
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', margin: "2%" }}>
       <Title>Sää Oulussa</Title>
       <Text>{dateNow.toLocaleString()}</Text>
@@ -78,7 +77,6 @@ const HomeScreen = ({ navigation }) => {
         </Pressable>
       </View>
     </View>
-    </SafeAreaView>
   )
 }
 

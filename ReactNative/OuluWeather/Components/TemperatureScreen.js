@@ -37,7 +37,7 @@ const TemperatureScreen = () => {
     max = -50
     dateNow.setDate(dateNow.getDate() - 1)
   }
-  console.log(temperatures)
+  // console.log(temperatures)
   temperatures = temperatures.filter(x => x[1] < 50)
 
   for (let i = 0; i < temperatures.length; i++) {
