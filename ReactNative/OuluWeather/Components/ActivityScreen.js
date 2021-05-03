@@ -6,7 +6,8 @@ import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
 
 const ActivityScreen = () => {
-  const data = React.useContext(AppContext)
+  const values = React.useContext(AppContext)
+  const data = values.data
   const dateNow = new Date()
 
   let activitys = []
@@ -18,6 +19,7 @@ const ActivityScreen = () => {
   const hourlyDatasets = [{
     data: []
   }]
+
   let count = 0
   let countHourly = 0
 
@@ -42,7 +44,7 @@ const ActivityScreen = () => {
   }
 
   // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
-  const [hourlyActivity, setHourlyActivity] = React.useState([])
+  const [hourlyActivity, setHourlyActivity] = React.useState([[new Date(), 0]])
   const getHourlyActivity = () => {
 
     if (data.length > 0) {
@@ -67,22 +69,42 @@ const ActivityScreen = () => {
   }
   React.useEffect(getHourlyActivity, [data])
 
+  let prevDate = hourlyActivity[0][0].getUTCDate()
   for (let i = 0; i < hourlyActivity.length; i++) {
-    i % 4 == 0 || i == 0 || i == 23 ? hourlyLabels.unshift(hourlyActivity[i][0].getUTCHours() + ":00") : hourlyLabels.unshift("")
+    let date = hourlyActivity[i][0].getUTCDate()
+    let month = hourlyActivity[i][0].getUTCMonth() + 1
+    let hours = hourlyActivity[i][0].getUTCHours()
+    if (i % 4 == 0 || i == 0 || i == 23) {
+      // console.log(`i: ${i} hourlyActivity[i][0].getUTCDate(): ${hourlyActivity[i][0].getUTCDate()}`)
+      if (i > 0 && date != prevDate) {
+        hourlyLabels.unshift(`${date}.${month}. ${hours}:00`)
+        prevDate = date
+      } else {
+        hourlyLabels.unshift(hours + ":00")
+      }
+    } else {
+      hourlyLabels.unshift("")
+    } 
     hourlyDatasets[0].data.unshift(hourlyActivity[i][1])
   }
 
-  if (hourlyActivity.length == 0) {
+  React.useEffect(() => {
+    values.setActData({
+      data: hourlyDatasets[0].data,
+      labels: hourlyLabels})
+  },[data])
+
+  if (hourlyActivity.length < 24) {
     return (
-      <View style={{ flex: 1 }}>
-        <ActivityIndicator />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#00ff00" />
       </View>
 
     )
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', marginVertical: 20 }}>
           <Title style={{ marginBottom: 30 }}>Ulkonaliikkumisaktiivisuus</Title>
@@ -93,7 +115,7 @@ const ActivityScreen = () => {
               datasets
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
-            height={220}
+            height={Dimensions.get("window").height * 0.3}
             segments={10}
             yAxisInterval={1}
             fromZero={true}
@@ -126,7 +148,7 @@ const ActivityScreen = () => {
               datasets: hourlyDatasets
             }}
             width={Dimensions.get("window").width > 500 ? Dimensions.get("window").width * 0.8 : Dimensions.get("window").width * 0.95}
-            height={220}
+            height={Dimensions.get("window").height * 0.3}
             segments={10}
             yAxisInterval={1}
             fromZero={true}

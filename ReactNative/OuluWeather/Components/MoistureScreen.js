@@ -4,9 +4,12 @@ import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
+import CombinedLineChart from "./CombinedLineChart"
+
 
 const MoistureScreen = () => {
-  const data = React.useContext(AppContext)
+  const values = React.useContext(AppContext)
+  const data = values.data
   const dateNow = new Date()
 
   let humiditys = []
@@ -37,7 +40,7 @@ const MoistureScreen = () => {
     max = 0
     dateNow.setDate(dateNow.getDate() - 1)
   }
-  console.log(humiditys)
+  // console.log(humiditys)
   humiditys = humiditys.filter(x => x[1] < 101)
 
   for (let i = 0; i < humiditys.length; i++) {
@@ -64,7 +67,7 @@ const MoistureScreen = () => {
           count++
         } else {
           const tmpArr = [previous, total / count]
-          console.log("total: ", total, "count: ", count)
+          // console.log("total: ", total, "count: ", count)
           hourlyHumidities.push(tmpArr)
           previous = current
           count = 0
@@ -84,15 +87,15 @@ const MoistureScreen = () => {
 
   if (hourlyHumidity.length == 0) {
     return (
-      <View style={{ flex: 1 }}>
-        <ActivityIndicator />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#00ff00"/>
       </View>
 
     )
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', marginVertical: 20 }}>
           <Title style={{ marginBottom: 30 }}>Ilmankosteus %</Title>
@@ -164,6 +167,10 @@ const MoistureScreen = () => {
               borderRadius: 16,
             }}
           />
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', margin: "2%" }}>
+          <Text>Suhteutettu ilmankosteus ja aktiivisuus viimeisen 24 tunnin mittausdatasta</Text>
+          {data.length > 0 && <CombinedLineChart data={hourlyDatasets[0].data} legend="Ilmankosteus" unit="%" />}
         </View>
       </ScrollView>
     </SafeAreaView>

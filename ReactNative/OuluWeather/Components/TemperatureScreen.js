@@ -1,12 +1,15 @@
 import * as React from 'react'
-import { View, Text, ActivityIndicator, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, ActivityIndicator, SafeAreaView, ScrollView, Pressable } from 'react-native'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
 import { Title } from 'react-native-paper'
+import FlashMessage, {showMessage} from 'react-native-flash-message'
+import CombinedLineChart from './CombinedLineChart'
 
 const TemperatureScreen = () => {
-  const data = React.useContext(AppContext)
+  const values = React.useContext(AppContext)
+  const data = values.data
   const dateNow = new Date()
 
   let temperatures = []
@@ -49,7 +52,6 @@ const TemperatureScreen = () => {
   // Viimeisen 24 tunnin mittaukset. Ei ota huomioon aikaa, jolloin "sääasema" on ollut pois päältä
   const [hourlyTemperature, setHourlyTemperature] = React.useState([])
   const getHourlyTemperature = () => {
-
     if (data.length > 0) {
       let count = 0
       let total = 0
@@ -58,13 +60,14 @@ const TemperatureScreen = () => {
   
       for (let i = data.length - 1; hourlyTemperatures.length < 24; i--) {
         const current = new Date(data[i].time)
-  
+
         if (current.getDate() == previous.getDate() && current.getHours() == previous.getHours()) {
-          if (data[i].temperature > 100) { continue } else { total += data[i].temperature }
+          if (data[i].temperature > 100 || data[i].temperature == NaN) { continue } 
+          else { total += data[i].temperature }
           // total += data[i].temperature
           count++
         } else {
-          const tmpArr = [previous, total / count]
+          const tmpArr = [previous, total / (count > 0 ? count : 1)]
           hourlyTemperatures.push(tmpArr)
           previous = current
           count = 0
@@ -84,15 +87,15 @@ const TemperatureScreen = () => {
 
   if (hourlyTemperature.length == 0) {
     return (
-      <View style={{ flex: 1 }}>
-        <ActivityIndicator />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#00ff00"/>
       </View>
 
     )
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', marginVertical: 20 }}>
           <Title style={{ marginBottom: 30 }}>Lämpötila °C</Title>
@@ -136,6 +139,7 @@ const TemperatureScreen = () => {
               borderRadius: 16
             }}
           />
+          <FlashMessage position='center' />
           <Text style={{ marginTop: 30, textAlign: 'center' }}>Keskimääräinen lämpötila tuntitasolla (viimeiset 24 mittaustuntia)</Text>
           <LineChart
             data={{
@@ -170,6 +174,10 @@ const TemperatureScreen = () => {
               borderRadius: 16,
             }}
           />
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', margin: "2%" }}>
+        <Text>Suhteutettu lämpötila ja aktiivisuus viimeisen 24 tunnin mittausdatasta</Text>
+      {data.length > 0 && <CombinedLineChart data={hourlyDatasets[0].data} legend="Lämpötila" unit="°C" />}
+      </View>
         </View>
       </ScrollView>
     </SafeAreaView>

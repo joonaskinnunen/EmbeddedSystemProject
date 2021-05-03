@@ -15,11 +15,28 @@ const Tab = createMaterialTopTabNavigator();
 
 
 const TabNavigation = () => {
+    const [actData, setActData] = React.useState([{}])
     const [data, setData] = React.useState([])
+    const values = {
+        data: data,
+        actData: actData,
+        setActData: setActData
+    }
+    console.log('values: ', values)
     const getData = () => {
         const config = {
             method: 'get',
-            url: 'http://ouluweather.herokuapp.com/api/data',
+            ...Platform.select({
+                ios: {
+                    url: 'http://localhost:3001/api/data'    
+                },
+                android: {
+                    url: 'http://ouluweather.herokuapp.com/api/data'
+                },
+                default: {
+                    url: 'http://localhost:3001/api/data', 
+                }
+              }),
         }
         axios(config)
         .then(response => {
@@ -36,8 +53,9 @@ const TabNavigation = () => {
             clearInterval(interval_id)
         }
     }, [])
+
     return (
-        <AppContext.Provider value={data}>
+        <AppContext.Provider value={values}>
             <NavigationContainer>
                 <Tab.Navigator initialRouteName="Home"
                     tabBarPosition= "bottom"
@@ -74,31 +92,19 @@ const TabNavigation = () => {
                         inactiveTintColor: 'gray',
                         showIcon: 'true',
                         labelStyle: {
-                            ...Platform.select({
-                                android: {
-                                    fontSize: 11
-                                },
-                                ios: {
-                                    fontSize: 11                                 
-                                },
-                                default: {
-                                }
-                            }),
                             textTransform: 'none'
                         },
-                        tabStyle: {
-                            ...Platform.select({
-                                android: {
-                                    fontSize: 5
-                                },
-                                ios: {
-                                    fontSize: 5                                 
-                                },
-                                default: {
-                                  flexDirection: 'row'
-                                }
-                            })
-                        }
+                        ...Platform.select({
+                            android: {
+                                showLabel: false
+                            },
+                            ios: {
+                                showLabel: false
+                            },
+                            default: {
+                                tabStyle: {flexDirection: 'row'},
+                            }
+                        })
                     }}
                 >
                     <Tab.Screen name="Home" component={HomeStackScreen}

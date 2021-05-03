@@ -4,9 +4,11 @@ import { Title } from 'react-native-paper'
 import AppContext from '../Components/AppContext'
 import { LineChart } from "react-native-chart-kit"
 import { Dimensions } from "react-native"
+import CombinedLineChart from "./CombinedLineChart"
 
 const LightnessScreen = () => {
-  const data = React.useContext(AppContext)
+  const values = React.useContext(AppContext)
+  const data = values.data
   const dateNow = new Date()
 
   let lightnesses = []
@@ -83,8 +85,8 @@ const LightnessScreen = () => {
 
   if (hourlyLightness.length == 0) {
     return (
-      <View style={{ flex: 1 }}>
-        <ActivityIndicator />
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#00ff00"/>
       </View>
 
     )
@@ -92,7 +94,7 @@ const LightnessScreen = () => {
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{flex: 1}}>
       <ScrollView>
         <View style={{ flex: 1, alignItems: 'center', marginVertical: 20 }}>
           <Title style={{ marginBottom: 30 }}>Valon määrä</Title>
@@ -164,6 +166,10 @@ const LightnessScreen = () => {
               borderRadius: 16,
             }}
           />
+        </View>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-start', margin: "2%" }}>
+          <Text>Suhteutettu valoisuus ja aktiivisuus viimeisen 24 tunnin mittausdatasta</Text>
+          {data.length > 0 && <CombinedLineChart data={hourlyDatasets[0].data} legend="Valoisuus" unit="lx" />}
         </View>
       </ScrollView>
     </SafeAreaView>
